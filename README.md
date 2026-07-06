@@ -1,4 +1,4 @@
-# NNT 3SUM in [-U, U]
+# NTT 3SUM in [-U, U]
 
 A Rust solver for the **3SUM decision problem**:
 
