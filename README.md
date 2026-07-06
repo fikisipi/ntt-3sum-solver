@@ -1,6 +1,6 @@
 # NTT 3SUM in [-U, U] (*)
 
-(*) - thanks to Claude/Codex. trying to get better at algos + Rust
+(*) - thanks to Claude/Codex. trying to get better at algos + Rust, execise from CLRS
 
 A Rust solver for the **3SUM decision problem**:
 
