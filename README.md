@@ -27,16 +27,12 @@ Now a triple exists whenever the value $-s$ is somewhere in the input. One looku
 
 There's one catch: the convolution happily pairs an element with itself. A quick inclusion–exclusion pass subtracts those self-pairs and reused indices, so "distinct indices" means what it should — not just distinct values.
 
-## Complexity and scope
-
-What matters here isn't $n$. It's how wide the values spread — the *universe*.
-
 - Let $U = \max(a_i) - \min(a_i) + 1$.
 - Runtime is $O(U \log U)$, almost all of it the NTT. The only part that scales with $n$ is the single pass that tallies frequencies.
 - So this is *weakly (pseudo-)polynomial*: great when $U$ is small next to $n$, useless as a general 3SUM algorithm. (General 3SUM has no known truly-subquadratic bound anyway.)
 - When $U$ gets too big, the solver returns `None` rather than quietly limping along at $O(n^2)$.
 
-## Compute
+## Benchmark
 
 Both benchmarks race the convolution solver against the textbook $O(n^2)$ sorted two-pointer baseline, on generated mixed-sign inputs. They're for different jobs.
 
