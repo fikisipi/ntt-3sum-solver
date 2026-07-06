@@ -3,6 +3,3 @@ name = "three-sum"
 version = "0.1.0"
 edition = "2021"
 description = "A bounded-integer 3SUM solver using exact NTT convolution."
-
-[lib]
-path = "three_sum.rs"
