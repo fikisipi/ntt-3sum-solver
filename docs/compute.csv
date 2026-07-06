@@ -1,5 +1,5 @@
-n,universe,convolution_avg_ms,quadratic_avg_ms,convolution_result,quadratic_result
-2000,3997,3.240,1.699,Some(false),false
-10000,3997,2.637,8.013,Some(false),false
-50000,3997,2.373,33.267,Some(false),false
-50000,99997,105.151,659.874,Some(false),false
+n,universe,convolution_median_ms,quadratic_median_ms,convolution_result,quadratic_result
+2000,3997,3.510,1.464,Some(false),false
+10000,3997,2.435,7.022,Some(false),false
+50000,3997,2.312,32.303,Some(false),false
+50000,99997,104.343,631.344,Some(false),false

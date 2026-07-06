@@ -3,3 +3,11 @@ name = "three-sum"
 version = "0.1.0"
 edition = "2021"
 description = "A bounded-integer 3SUM solver using exact NTT convolution."
+autobenches = false
+
+[dev-dependencies]
+criterion = { version = "0.8.2", features = ["html_reports"] }
+
+[[bench]]
+name = "three_sum"
+harness = false

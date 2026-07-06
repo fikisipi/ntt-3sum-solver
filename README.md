@@ -34,11 +34,18 @@ This implementation is limited to bounded integers, and its complexity is parame
 
 ## Compute
 
-The benchmark compares this convolution solver against the standard $O(n^2)$ sorted two-pointer baseline on generated mixed-sign inputs. These are five-run local release-build averages, so treat them as directional rather than absolute.
+Both benchmarks compare this convolution solver against the standard $O(n^2)$ sorted two-pointer baseline on generated mixed-sign inputs:
+
+- **`cargo bench`** runs the [Criterion](https://github.com/bheisler/criterion.rs) suite in `benches/three_sum.rs`, with outlier detection and confidence intervals. It sweeps three views: growing `n` at fixed universe, growing the universe `U` at fixed `n`, and a satisfiable (yes-)instance where the short-circuiting baseline can return early.
+- **`cargo run --release --example benchmark`** is a dependency-free harness that emits the CSV table behind the plot. It reports the *median* of several timed runs after a warmup pass; median is used rather than the mean so a single slow run (scheduler noise, turbo clocking) does not skew the figure.
+
+The plot below is local release-build data, so treat it as directional rather than absolute.
 
 ![Runtime comparison](docs/compute.svg)
 
 Raw numbers are in `docs/compute.csv`.
+
+> **Note:** `docs/compute.svg` is hand-drawn and does not regenerate automatically. After re-running the example, redraw it manually to match the refreshed `docs/compute.csv`.
 
 ## Usage
 
@@ -48,10 +55,11 @@ Run the tests:
 cargo test
 ```
 
-Run the benchmark:
+Run the benchmarks:
 
 ```sh
-cargo run --release --example benchmark
+cargo bench                                 # rigorous Criterion suite
+cargo run --release --example benchmark     # CSV table for the plot
 ```
 
 Use as a library:
@@ -68,5 +76,7 @@ fn main() {
 ## Files
 
 - `src/lib.rs` - library implementation and tests
-- `examples/benchmark.rs` - benchmark used for the compute plot
+- `benches/three_sum.rs` - Criterion benchmark suite (`cargo bench`)
+- `benches/support.rs` - shared input generator and quadratic baseline
+- `examples/benchmark.rs` - CSV-emitting harness for the compute plot
 - `docs/compute.svg` - runtime comparison plot
