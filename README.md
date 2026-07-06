@@ -2,7 +2,7 @@
 
 *Thanks to Claude/Codex, read as an exercise from [CLRS, Intro to Algos](https://en.wikipedia.org/wiki/Introduction_to_Algorithms).*
 
-A Rust solver for the **3SUM decision problem**, with a bounded universe:
+A Rust solver for the **3SUM decision problem** that performs well asymptotically for bounded universes:
 
 > Given integers $a_1, \dots, a_n \in [-U, U]$, are there three distinct indices $i$, $j$, $k$ with $a_i + a_j + a_k = 0$?
 
