@@ -60,8 +60,3 @@ Run the benchmarks:
 cargo bench                                 # rigorous Criterion suite
 cargo run --release --example benchmark     # CSV table for the plot
 ```
-
-    let nums = vec![-1, 0, 1, 2];
-    println!("{:?}", Solution::has_three_sum(nums));
-}
-```
