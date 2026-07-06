@@ -21,9 +21,7 @@ Three outcomes:
 
 Count how many times each value shows up. That gives a frequency vector. Square it with a Number Theoretic Transform (NTT), and you learn, for every sum $s$, how many pairs $(a_i, a_j)$ add up to $s$.
 
-Now a triple exists whenever the value $-s$ is somewhere in the input. One lookup per sum.
-
-There's one catch: the convolution happily pairs an element with itself. A quick inclusion–exclusion pass subtracts those self-pairs and reused indices, so "distinct indices" means what it should — not just distinct values.
+Uses inclusion–exclusion self-pairs and reused indices.
 
 - Let $U = \max(a_i) - \min(a_i) + 1$.
 - Runtime is $O(U \log U)$, almost all of it the NTT. The only part that scales with $n$ is the single pass that tallies frequencies.
