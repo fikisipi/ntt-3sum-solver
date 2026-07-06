@@ -4,7 +4,7 @@
 
 A Rust solver for the **3SUM decision problem**:
 
-> Given integers $a_1, \dots, a_n$, are there three distinct indices $i$, $j$, $k$ with $a_i + a_j + a_k = 0$
+> Given integers $a_1, \dots, a_n$ (in range $-U \dots U$), are there three distinct indices $i$, $j$, $k$ with $a_i + a_j + a_k = 0$
 
 ## Implementation
 
