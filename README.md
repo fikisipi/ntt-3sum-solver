@@ -1,6 +1,6 @@
 # NTT subquadratic 3SUM in \[-U, U\]
 
-(*) - thanks to Claude/Codex, read as an execise from CLRS ed4
+*thanks to Claude/Codex, read as an execise from [CLRS, Intro to Algos](https://en.wikipedia.org/wiki/Introduction_to_Algorithms).*
 
 A Rust solver for the **3SUM decision problem**, with a bounded universe:
 
@@ -8,10 +8,12 @@ A Rust solver for the **3SUM decision problem**, with a bounded universe:
 
 ## Implementation
 
-`Solution::has_three_sum(nums)` decides bounded-integer 3SUM by exact convolution:
+`Solution::has_three_sum(nums)` decides bounded-integer [3SUM](https://en.wikipedia.org/wiki/3SUM#cite_note-7) by exact convolution:
 
 ```rust
-let result = Solution::has_three_sum(vec![-5, 2, 3, 7]);
+let result = Solution::has_three_sum(
+  vec![-5, 2, 3, 7]
+);
 assert_eq!(result, Some(true));
 ```
 
