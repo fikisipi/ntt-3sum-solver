@@ -32,15 +32,13 @@ Uses inclusion–exclusion self-pairs and reused indices.
 
 Both benchmarks race the convolution solver against the textbook $O(n^2)$ sorted two-pointer baseline, on generated mixed-sign inputs. They're for different jobs.
 
-**`cargo bench`** is the one to trust. It runs the [Criterion](https://github.com/bheisler/criterion.rs) suite in `benches/three_sum.rs`, with outlier detection and confidence intervals, from three angles: growing `n` at fixed universe, growing the universe at fixed `n`, and a satisfiable instance where the baseline gets to bail out early.
+**`cargo bench`** runs the [Criterion](https://github.com/bheisler/criterion.rs) suite in `benches/three_sum.rs`, with outlier detection and confidence intervals, from three angles: growing `n` at fixed universe, growing the universe at fixed `n`, and a satisfiable instance where the baseline gets to bail out early.
 
-**`cargo run --release --example benchmark`** is the quick-and-dirty one. No dependencies; it just prints the CSV behind the plot. It warms up first and reports the *median*, so one unlucky slow run doesn't wreck the number.
+**`cargo run --release --example benchmark`** prints the CSV behind the plot. It warms up first and reports the *median*, so one unlucky slow run doesn't wreck the number.
 
 ![Runtime comparison](docs/compute.svg)
 
 Raw numbers are in `docs/compute.csv`.
-
-> **Note:** `docs/compute.svg` is hand-drawn — it won't regenerate on its own. After re-running the example, redraw it to match the fresh `docs/compute.csv`.
 
 ## Usage
 
