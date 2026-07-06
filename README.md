@@ -1,51 +1,60 @@
 # Bounded 3-SUM solver
 
-This repo contains a Rust implementation of the **3SUM decision problem**:
+A Rust solver for the **3SUM decision problem**:
 
-> Given a sequence of integers $a_1, \dots, a_n$, decide whether there exist distinct indices $i$, $j$, $k$ with $a_i + a_j + a_k = 0$.
+> Given integers $a_1, \dots, a_n$, are there three distinct indices $i$, $j$, $k$ with $a_i + a_j + a_k = 0$?
 
-This is the decision (yes/no) variant: the solver returns a single boolean rather than enumerating witnesses (the *reporting* variant) or counting them (the *counting* variant). Because it only decides existence, it can short-circuit and avoids materializing the potentially $\Theta(n^3)$ set of matching triples.
+Note the question mark. This is the *decision* variant — it answers yes or no. It doesn't list the triples (that's *reporting*) or count them (that's *counting*).
 
-## What Is Implemented
+That distinction buys something. Once you only care whether a triple exists, you can stop the moment you find one. And you never have to build the full set of matches, which can be $\Theta(n^3)$ large.
 
-`Solution::has_three_sum(nums)` solves bounded-integer 3SUM with exact convolution:
+## Implementation
+
+`Solution::has_three_sum(nums)` decides bounded-integer 3SUM by exact convolution:
 
 ```rust
 let result = Solution::has_three_sum(vec![-5, 2, 3, 7]);
 assert_eq!(result, Some(true));
 ```
 
-Return values:
+Three outcomes:
 
-- `Some(true)` — a zero-sum triple exists (the instance is a yes-instance).
-- `Some(false)` — no zero-sum triple exists (no-instance).
-- `None` — the integer universe is too large for this bounded-integer method; the instance is undecided by this solver.
+- `Some(true)` — a zero-sum triple exists.
+- `Some(false)` — none does.
+- `None` — the values are spread too far apart for this method, so the solver declines instead of guessing.
 
-The implementation reduces the decision problem to a convolution over the value domain. It builds a frequency (indicator/multiplicity) vector over the input value range, squares it via Number Theoretic Transform (NTT) convolution to obtain, for every attainable pair sum $s$, the number of ordered index pairs with $a_i + a_j = s$, then checks whether some value $a_k = -s$ is present. An inclusion–exclusion correction removes pairs and triples that reuse an index, so the answer respects the *distinct indices* requirement rather than merely distinct values.
+The trick is to stop thinking about the list and start thinking about the values.
+
+Count how many times each value shows up. That gives a frequency vector. Square it with a Number Theoretic Transform (NTT), and you learn, for every sum $s$, how many pairs $(a_i, a_j)$ add up to $s$.
+
+Now a triple exists whenever the value $-s$ is somewhere in the input. One lookup per sum.
+
+There's one catch: the convolution happily pairs an element with itself. A quick inclusion–exclusion pass subtracts those self-pairs and reused indices, so "distinct indices" means what it should — not just distinct values.
 
 ## Complexity and scope
 
-This implementation is limited to bounded integers, and its complexity is parameterized by the size of the value domain (the *universe*) rather than by $n$ alone:
+What matters here isn't $n$. It's how wide the values spread — the *universe*.
 
-- Let $U = \max(a_i) - \min(a_i) + 1$ be the size of the integer universe.
-- Runtime is $O(U \log U)$, dominated by the NTT convolution; this is independent of $n$ beyond the $O(n)$ pass that builds the frequency vector.
-- It is therefore *weakly polynomial* (pseudo-polynomial in the input values): fast when $U$ is bounded relative to $n$, but not a subquadratic algorithm for the general 3SUM problem, whose best known bounds remain mildly subquadratic.
-- It intentionally returns `None` for very large universes instead of silently falling back to the standard $O(n^2)$ approach.
+- Let $U = \max(a_i) - \min(a_i) + 1$.
+- Runtime is $O(U \log U)$, almost all of it the NTT. The only part that scales with $n$ is the single pass that tallies frequencies.
+- So this is *weakly (pseudo-)polynomial*: great when $U$ is small next to $n$, useless as a general 3SUM algorithm. (General 3SUM has no known truly-subquadratic bound anyway.)
+- When $U$ gets too big, the solver returns `None` rather than quietly limping along at $O(n^2)$.
 
 ## Compute
 
-Both benchmarks compare this convolution solver against the standard $O(n^2)$ sorted two-pointer baseline on generated mixed-sign inputs:
+Both benchmarks race the convolution solver against the textbook $O(n^2)$ sorted two-pointer baseline, on generated mixed-sign inputs. They're for different jobs.
 
-- **`cargo bench`** runs the [Criterion](https://github.com/bheisler/criterion.rs) suite in `benches/three_sum.rs`, with outlier detection and confidence intervals. It sweeps three views: growing `n` at fixed universe, growing the universe `U` at fixed `n`, and a satisfiable (yes-)instance where the short-circuiting baseline can return early.
-- **`cargo run --release --example benchmark`** is a dependency-free harness that emits the CSV table behind the plot. It reports the *median* of several timed runs after a warmup pass; median is used rather than the mean so a single slow run (scheduler noise, turbo clocking) does not skew the figure.
+**`cargo bench`** is the one to trust. It runs the [Criterion](https://github.com/bheisler/criterion.rs) suite in `benches/three_sum.rs`, with outlier detection and confidence intervals, from three angles: growing `n` at fixed universe, growing the universe at fixed `n`, and a satisfiable instance where the baseline gets to bail out early.
 
-The plot below is local release-build data, so treat it as directional rather than absolute.
+**`cargo run --release --example benchmark`** is the quick-and-dirty one. No dependencies; it just prints the CSV behind the plot. It warms up first and reports the *median*, so one unlucky slow run doesn't wreck the number.
+
+The plot is local release-build data. Read it as directional, not gospel.
 
 ![Runtime comparison](docs/compute.svg)
 
 Raw numbers are in `docs/compute.csv`.
 
-> **Note:** `docs/compute.svg` is hand-drawn and does not regenerate automatically. After re-running the example, redraw it manually to match the refreshed `docs/compute.csv`.
+> **Note:** `docs/compute.svg` is hand-drawn — it won't regenerate on its own. After re-running the example, redraw it to match the fresh `docs/compute.csv`.
 
 ## Usage
 
