@@ -23,7 +23,7 @@ Three outcomes:
 - `Some(false)` — none does.
 - `None` — the values are spread too far apart for this method, so the solver declines instead of guessing.
 
-Count how many times each value shows up. That gives a frequency vector. Square it with a Number Theoretic Transform (NTT), and you learn, for every sum $s$, how many pairs $(a_i, a_j)$ add up to $s$.
+Count how many times each value shows up. That gives a frequency vector. Square it with a Number Theoretic Transform (NTT) - see https://cp-algorithms.com/algebra/fft.html#number-theoretic-transform), and you learn, for every sum $s$, how many pairs $(a_i, a_j)$ add up to $s$.
 
 Note that one must use inclusion–exclusion (see `count_distinct_index_triples`) to prevent counting errors.
 
