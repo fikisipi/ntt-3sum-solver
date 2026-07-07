@@ -30,7 +30,7 @@ Note that one must use inclusion–exclusion (see `count_distinct_index_triples`
 - Let $U = \max(a_i) - \min(a_i) + 1$.
 - Runtime is $O(U \log U)$, almost all of it the NTT. The only part that scales with $n$ is the single pass that tallies frequencies.
 - So this is *weakly (pseudo-)polynomial*: great when $U$ is small next to $n$, useless as a general 3SUM algorithm. (General 3SUM has no known truly-subquadratic bound anyway.)
-- When $U$ gets too big, the solver returns `None` rather than quietly limping along at $O(n^2)$.
+- When $U$ gets too big, the solver returns `None`
 
 ## Benchmark
 
